@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Newsletter Timer Generator</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        form { display: grid; gap: 15px; }
+        label { font-weight: bold; }
+        input, select { padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+        button { background: #007cba; color: white; padding: 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; }
+        button:hover { background: #005a87; }
+        #preview { margin-top: 20px; padding: 20px; background: #f9f9f9; border-radius: 8px; }
+        #embedCode { background: #eee; padding: 10px; font-family: monospace; word-break: break-all; }
+        .demo-timer { border: 1px solid #ddd; max-width: 100%; height: auto; }
+    </style>
+</head>
+<body>
+    <h1>Generator timera pre newsletter</h1>
+    <p>Vyplň parametre a skopíruj HTML kód do e-mailu (napr. Piano CMS alebo Mailchimp).</p>
+    
+    <form id="timerForm">
+        <label>Koncový dátum a čas (UTC):</label>
+        <input type="datetime-local" id="endDate" required>
+        
+        <label>Jazyk:</label>
+        <select id="language">
+            <option value="sk">Slovenčina (dni, hodiny...)</option>
+            <option value="en">English</option>
+            <!-- Ďalšie jazyky podľa Sendtric -->
+        </select>
+        
+        <label>Šírka (px):</label>
+        <input type="number" id="width" value="300" min="100" max="600">
+        
+        <label>Výška (px):</label>
+        <input type="number" id="height" value="100" min="50" max="200">
+        
+        <label>Farba čísel (hex):</label>
+        <input type="color" id="textColor" value="#000000">
+        
+        <label>Farba pozadia (hex):</label>
+        <input type="color" id="bgColor" value="#ffffff">
+        
+        <button type="submit">Generovať embed kód</button>
+    </form>
+    
+    <div id="preview" style="display: none;">
+        <h3>Náhľad (približný):</h3>
+        <img id="demoImg" class="demo-timer" alt="Demo timer">
+        <h3>Embed kód pre e-mail:</h3>
+        <textarea id="embedCode" rows="4" readonly></textarea>
+        <p><strong>Pokyny:</strong> Vlož do HTML bloku newsletteru. Funguje v Gmail, Outlook atď.[web:16]</p>
+    </div>
+
+    <script>
+        // Príklad generovania – v reále pošli request na Sendtric API alebo podobné
+        // Pre demo použijeme placeholder; uprav na reálne volanie (fetch na Sendtric generator)
+        document.getElementById('timerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const endDate = new Date(document.getElementById('endDate').value + ':00Z').toISOString();
+            const width = document.getElementById('width').value;
+            const height = document.getElementById('height').value;
+            const textColor = document.getElementById('textColor').value.slice(1);
+            const bgColor = document.getElementById('bgColor').value.slice(1);
+            
+            // Placeholder URL – vymeniť za reálne volanie na Sendtric/EmailCountdownTimer API
+            // Príklad: fetch('https://api.sendtric.com/generate?end=' + endDate + '&color=' + textColor)
+            const timerUrl = `https://github.com/menoprjiezvisko/nlgenerator/gener.php?end=${endDate}&w=${width}&h=${height}&text=${textColor}&bg=${bgColor}`;
+            
+            document.getElementById('demoImg').src = timerUrl;
+            document.getElementById('embedCode').value = `<img src="${timerUrl}" width="${width}" height="${height}" style="display: block;" alt="Timer" />`;
+            document.getElementById('preview').style.display = 'block';
+        });
+        
+        // Inicializuj dátum na zajtra
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        document.getElementById('endDate').value = tomorrow.toISOString().slice(0,16);
+    </script>
+</body>
+</html>
